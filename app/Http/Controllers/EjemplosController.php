@@ -63,7 +63,7 @@ class EjemplosController extends Controller
     public function edit($id)
     {
         $ejemplo = Ejemplo::findOrFail($id); // Buscar el proyecto por ID o lanzar 404 si no existe
-        return view("projects.update", compact("ejemplo")); // Ahora sí pasas la variable correctamente
+        return view("projects/update", compact("ejemplo")); // Ahora sí pasas la variable correctamente
     }       
 
     /**
@@ -73,9 +73,16 @@ class EjemplosController extends Controller
      * @param  \App\Models\Ejemplos  $ejemplos
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Ejemplo $ejemplo)
+    public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'titulo'=>'required|max:255',
+            'descripcion'=>'required'
+        ]);
+        $ejemplo=Ejemplo::find($id);
+        $ejemplo->update($request->all());
+        return redirect('project/')
+        ->with('success','Proyecto actualiado satisfactoriamente.');
     }
 
     /**
@@ -84,8 +91,13 @@ class EjemplosController extends Controller
      * @param  \App\Models\Ejemplos  $ejemplos
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Ejemplos $ejemplo)
+    public function destroy($id)
     {
-        //
+        $proyecto = Ejemplo::findOrFail($id);
+        $proyecto->delete();
+
+        return redirect()->route('project.index')->with('success', 'Proyecto eliminado con exito.');
     }
+
+
 }

@@ -19,5 +19,3 @@ Route::get('/', function () {
 });
 
 Route::resource('project',EjemplosController::class);
-
-Route::get('/proyectos/{proyecto}/edit', [ProyectoController::class, 'edit'])->name('proyectos.edit');
